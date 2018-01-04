@@ -1,55 +1,518 @@
-## Unit 6 | Assignment - What's the Weather Like?
 
-## Background
 
-Whether financial, political, or social -- data's true power lies in its ability to answer questions definitively. So let's take what you've learned about Python requests, APIs, and JSON traversals to answer a fundamental question: "What's the weather like as we approach the equator?"
+```python
+# Dependencies
+import json
+from numpy import random
+import requests
+import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+from citipy import citipy
+from config import openweather_key
+```
 
-Now, we know what you may be thinking: _"Duh. It gets hotter..."_
 
-But, if pressed, how would you **prove** it?
+```python
+lat = np.random.uniform(low=-90.000, high=90.000, size=1500)
+lon = np.random.uniform(low=-180.000, high=180.000, size=1500)
+```
 
-![Equator](equatorsign.png)
 
-## WeatherPy
+```python
+coords = {"Lat": lat, "Lng": lon}
+df = pd.DataFrame(coords)
+```
 
-In this example, you'll be creating a Python script to visualize the weather of 500+ cities across the world of varying distance from the equator. To accomplish this, you'll be utilizing a [simple Python library](https://pypi.python.org/pypi/citipy), the [OpenWeatherMap API](https://openweathermap.org/api), and a little common sense to create a representative model of weather across world cities.
 
-Your objective is to build a series of scatter plots to showcase the following relationships:
+```python
+new_df = df.sample(n=15)
+new_df.head()
+```
 
-* Temperature (F) vs. Latitude
-* Humidity (%) vs. Latitude
-* Cloudiness (%) vs. Latitude
-* Wind Speed (mph) vs. Latitude
 
-Your final notebook must:
 
-* Randomly select **at least** 500 unique (non-repeat) cities based on latitude and longitude.
-* Perform a weather check on each of the cities using a series of successive API calls.
-* Include a print log of each city as it's being processed with the city number and city name.
-* Save both a CSV of all data retrieved and png images for each scatter plot.
 
-As final considerations:
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
 
-* You must use Matplotlib to create your plots.
-* You must include a written description of three observable trends based on the data.
-* You must use proper labeling of your plots, including aspects like: Plot Titles (with date of analysis) and Axes Labels.
-* You must include an exported markdown version of your Notebook called  `README.md` in your GitHub repository.
-* See [Example Solution](WeatherPy_Example.pdf) for a reference on expected format.
+    .dataframe thead th {
+        text-align: left;
+    }
 
-## Hints and Considerations
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Lat</th>
+      <th>Lng</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>422</th>
+      <td>-74.275300</td>
+      <td>-93.193371</td>
+    </tr>
+    <tr>
+      <th>756</th>
+      <td>-11.179222</td>
+      <td>28.326064</td>
+    </tr>
+    <tr>
+      <th>1225</th>
+      <td>-4.143961</td>
+      <td>2.975275</td>
+    </tr>
+    <tr>
+      <th>1433</th>
+      <td>-88.910945</td>
+      <td>-92.555193</td>
+    </tr>
+    <tr>
+      <th>1059</th>
+      <td>-46.090121</td>
+      <td>-114.734815</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
-* You may want to start this assignment by refreshing yourself on the [geographic coordinate system](http://desktop.arcgis.com/en/arcmap/10.3/guide-books/map-projections/about-geographic-coordinate-systems.htm).
 
-* Next, spend the requisite time necessary to study the OpenWeatherMap API. Based on your initial study, you should be able to answer  basic questions about the API: Where do you request the API key? Which Weather API in particular will you need? What URL endpoints does it expect? What JSON structure does it respond with? Before you write a line of code, you should be aiming to have a crystal clear understanding of your intended outcome.
 
-* Though we've never worked with the [citipy Python library](https://pypi.python.org/pypi/citipy), push yourself to decipher how it works, and why it might be relevant. Before you try to incorporate the library into your analysis, start by creating simple test cases outside your main script to confirm that you are using it correctly.
 
-* Part of our expectation in this challenge is that you will use critical thinking skills to understand how and why we're recommending the tools we are. What is Citipy for? Why would you use it in conjunction with the OpenWeatherMap API? How would you do so?
+```python
+new_df = new_df.reset_index(drop=True)
+new_df.head()
+```
 
-* In building your script, pay attention to the cities you are using in your query pool. Are you getting coverage of the full gamut of latitudes and longitudes? Or are you simply choosing 500 cities concentrated in one region of the world? Even if you were a geographic genius, simply rattling 500 cities based on your human selection would create a biased dataset. Be thinking of how you should counter this. (Hint: Consider the full range of latitudes).
 
-* Lastly, remember -- this is a challenging activity. Push yourself! If you complete this task, then you can safely say that you've gained a strong mastery of the core foundations of data analytics and it will only go better from here. Good luck!
 
-## Copyright
 
-Coding Boot Camp (C) 2017. All Rights Reserved.
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Lat</th>
+      <th>Lng</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-74.275300</td>
+      <td>-93.193371</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-11.179222</td>
+      <td>28.326064</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-4.143961</td>
+      <td>2.975275</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-88.910945</td>
+      <td>-92.555193</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-46.090121</td>
+      <td>-114.734815</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+coordinates = tuple(zip(new_df["Lat"], new_df["Lng"]))
+coordinates
+```
+
+
+
+
+    ((-74.275300121217157, -93.193370986615889),
+     (-11.179222385108687, 28.326064364983807),
+     (-4.1439610954130757, 2.9752753578886484),
+     (-88.910945352665976, -92.55519318957181),
+     (-46.090121016095253, -114.73481513679735),
+     (32.017375137410909, -100.04180172320022),
+     (-6.2589420184359028, 136.76082544978112),
+     (-5.2108796731032356, 63.594251358776063),
+     (-18.491976578857162, 119.12522823658725),
+     (-34.898312834191096, -116.86226932324479),
+     (41.091937704940904, -3.6306314013070278),
+     (-65.298072588773934, -160.00753366856026),
+     (8.1130429207303649, 64.074250409099022),
+     (-78.389379945468676, -120.3126030645229),
+     (-47.716473045377576, 71.176619912361872))
+
+
+
+
+```python
+cities = []
+city_name = []
+for coordinate_pair in coordinates:
+    lat, lon = coordinate_pair
+    cities.append(citipy.nearest_city(lat, lon))
+
+for city in cities:
+    country_code = city.country_code
+    name = city.city_name
+    city_name.append(name)
+```
+
+
+```python
+new_df["City_Name"] = city_name
+new_df.head()
+```
+
+
+
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Lat</th>
+      <th>Lng</th>
+      <th>City_Name</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-74.275300</td>
+      <td>-93.193371</td>
+      <td>punta arenas</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-11.179222</td>
+      <td>28.326064</td>
+      <td>mansa</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-4.143961</td>
+      <td>2.975275</td>
+      <td>port-gentil</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-88.910945</td>
+      <td>-92.555193</td>
+      <td>punta arenas</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-46.090121</td>
+      <td>-114.734815</td>
+      <td>rikitea</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+# OpenWeather config info
+url = "http://api.openweathermap.org/data/2.5/weather?"
+units = "imperial"
+```
+
+
+```python
+# Create empty column for desired data
+new_df["Temperature"] = ""
+new_df["Humidity"] = ""
+new_df["Cloudiness"] = ""
+new_df["Wind_Speed"] = ""
+units = "imperial"
+weather_data = []
+
+# Counter
+row_count = 0
+
+# Loop through and run Google search to get all banks in 5 mile radius (8000 meters)
+for index, row in new_df.iterrows():
+    
+    # Create endpoint url using Google Places Radar and the lat/lng we identified earlier
+    target_url = url + "appid=" + openweather_key + "&units=" + units + "&q=" + str(new_df.loc[index]["City_Name"])
+
+    # This link helps to handily see the JSON generated for each query
+    print("Now retrieving city #%s: %s" % (row_count, new_df.loc[index]["City_Name"]))
+    row_count += 1 
+    print(target_url)
+    
+    # Run a request to grab the JSON at the target URL
+    response = requests.get(target_url).json()
+    weather_data.append(response)
+    
+    # Extract interesting data from responses
+    temp_data = [data.get("main").get("temp") for data in weather_data]
+    humidity_data = [data.get("main").get("humidity") for data in weather_data]
+    cloud_data = [data.get("clouds").get("all") for data in weather_data]
+    wind_data = [data.get("wind").get("speed") for data in weather_data]
+
+    
+    # Store the bank count into the Data Frame
+    new_df.set_value(index, "Temperature", temp_data[-1])
+    new_df.set_value(index, "Humidity", humidity_data[-1])
+    new_df.set_value(index, "Cloudiness", cloud_data[-1])
+    new_df.set_value(index, "Wind_Speed", wind_data[-1])
+
+    # Reset Counts
+    temp_data = []
+    humidity_data = []
+    cloud_data = []
+    wind_data = []
+    
+# Visualize
+new_df.head()
+```
+
+    Now retrieving city #0: punta arenas
+    http://api.openweathermap.org/data/2.5/weather?appid=480f9c5d42614026ec8d262bdebe16c9&units=imperial&q=punta arenas
+    Now retrieving city #1: mansa
+    http://api.openweathermap.org/data/2.5/weather?appid=480f9c5d42614026ec8d262bdebe16c9&units=imperial&q=mansa
+    Now retrieving city #2: port-gentil
+    http://api.openweathermap.org/data/2.5/weather?appid=480f9c5d42614026ec8d262bdebe16c9&units=imperial&q=port-gentil
+    Now retrieving city #3: punta arenas
+    http://api.openweathermap.org/data/2.5/weather?appid=480f9c5d42614026ec8d262bdebe16c9&units=imperial&q=punta arenas
+    Now retrieving city #4: rikitea
+    http://api.openweathermap.org/data/2.5/weather?appid=480f9c5d42614026ec8d262bdebe16c9&units=imperial&q=rikitea
+    Now retrieving city #5: abilene
+    http://api.openweathermap.org/data/2.5/weather?appid=480f9c5d42614026ec8d262bdebe16c9&units=imperial&q=abilene
+    Now retrieving city #6: nabire
+    http://api.openweathermap.org/data/2.5/weather?appid=480f9c5d42614026ec8d262bdebe16c9&units=imperial&q=nabire
+    Now retrieving city #7: victoria
+    http://api.openweathermap.org/data/2.5/weather?appid=480f9c5d42614026ec8d262bdebe16c9&units=imperial&q=victoria
+    Now retrieving city #8: port hedland
+    http://api.openweathermap.org/data/2.5/weather?appid=480f9c5d42614026ec8d262bdebe16c9&units=imperial&q=port hedland
+    Now retrieving city #9: rikitea
+    http://api.openweathermap.org/data/2.5/weather?appid=480f9c5d42614026ec8d262bdebe16c9&units=imperial&q=rikitea
+    Now retrieving city #10: colmenar viejo
+    http://api.openweathermap.org/data/2.5/weather?appid=480f9c5d42614026ec8d262bdebe16c9&units=imperial&q=colmenar viejo
+    Now retrieving city #11: mataura
+    http://api.openweathermap.org/data/2.5/weather?appid=480f9c5d42614026ec8d262bdebe16c9&units=imperial&q=mataura
+    Now retrieving city #12: kavaratti
+    http://api.openweathermap.org/data/2.5/weather?appid=480f9c5d42614026ec8d262bdebe16c9&units=imperial&q=kavaratti
+    Now retrieving city #13: punta arenas
+    http://api.openweathermap.org/data/2.5/weather?appid=480f9c5d42614026ec8d262bdebe16c9&units=imperial&q=punta arenas
+    Now retrieving city #14: souillac
+    http://api.openweathermap.org/data/2.5/weather?appid=480f9c5d42614026ec8d262bdebe16c9&units=imperial&q=souillac
+    
+
+
+
+
+<div>
+<style>
+    .dataframe thead tr:only-child th {
+        text-align: right;
+    }
+
+    .dataframe thead th {
+        text-align: left;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Lat</th>
+      <th>Lng</th>
+      <th>City_Name</th>
+      <th>Temperature</th>
+      <th>Humidity</th>
+      <th>Cloudiness</th>
+      <th>Wind_Speed</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>-74.275300</td>
+      <td>-93.193371</td>
+      <td>punta arenas</td>
+      <td>40.83</td>
+      <td>100</td>
+      <td>36</td>
+      <td>37.02</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-11.179222</td>
+      <td>28.326064</td>
+      <td>mansa</td>
+      <td>53.65</td>
+      <td>76</td>
+      <td>0</td>
+      <td>5.93</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>-4.143961</td>
+      <td>2.975275</td>
+      <td>port-gentil</td>
+      <td>77</td>
+      <td>88</td>
+      <td>90</td>
+      <td>3.36</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>-88.910945</td>
+      <td>-92.555193</td>
+      <td>punta arenas</td>
+      <td>40.83</td>
+      <td>100</td>
+      <td>36</td>
+      <td>37.02</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>-46.090121</td>
+      <td>-114.734815</td>
+      <td>rikitea</td>
+      <td>73.18</td>
+      <td>100</td>
+      <td>48</td>
+      <td>18.45</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+# Build a scatter plot for each data type
+plt.scatter(new_df["Lat"], new_df["Temperature"], marker="o")
+
+# Incorporate the other graph properties
+plt.title("City Latitude vs. Max Temperature")
+plt.ylabel("Temperature")
+plt.xlabel("Latitude")
+plt.grid(True)
+
+
+# Show plot
+plt.show()
+```
+
+
+![png](output_10_0.png)
+
+
+
+```python
+# Build a scatter plot for each data type
+plt.scatter(new_df["Lat"], new_df["Humidity"], marker="o")
+
+# Incorporate the other graph properties
+plt.title("City Latitude vs. Humidity")
+plt.ylabel("Humidity")
+plt.xlabel("Latitude")
+plt.grid(True)
+
+
+# Show plot
+plt.show()
+```
+
+
+![png](output_11_0.png)
+
+
+
+```python
+# Build a scatter plot for each data type
+plt.scatter(new_df["Lat"], new_df["Cloudiness"], marker="o")
+
+# Incorporate the other graph properties
+plt.title("City Latitude vs. Cloudiness")
+plt.ylabel("Cloudiness")
+plt.xlabel("Latitude")
+plt.grid(True)
+
+
+# Show plot
+plt.show()
+```
+
+
+![png](output_12_0.png)
+
+
+
+```python
+# Build a scatter plot for each data type
+plt.scatter(new_df["Lat"], new_df["Wind_Speed"], marker="o")
+
+# Incorporate the other graph properties
+plt.title("City Latitude vs. Wind Speed")
+plt.ylabel("Wind Speed")
+plt.xlabel("Latitude")
+plt.grid(True)
+
+
+# Show plot
+plt.show()
+```
+
+
+![png](output_13_0.png)
+
