@@ -1,0 +1,7 @@
+Financial Analysis
+----------------------------
+Total Months: 41
+Total Revenue: 18971412
+Total Revenue: -6758.975
+Total Revenue: ('Jan-16', 1837235)
+Total Revenue: ('Jul-14', -1779747)
