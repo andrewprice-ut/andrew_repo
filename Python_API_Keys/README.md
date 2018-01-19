@@ -454,7 +454,7 @@ plt.show()
 ```
 
 
-![png](output_10_0.png)
+![1](Images/1.png)
 
 
 
@@ -474,7 +474,7 @@ plt.show()
 ```
 
 
-![png](output_11_0.png)
+![2](Images/2.png)
 
 
 
@@ -494,7 +494,7 @@ plt.show()
 ```
 
 
-![png](output_12_0.png)
+![3](Images/3.png)
 
 
 
@@ -514,5 +514,5 @@ plt.show()
 ```
 
 
-![png](output_13_0.png)
+![4](Images/4.png)
 
