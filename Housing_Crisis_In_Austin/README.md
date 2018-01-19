@@ -3051,7 +3051,7 @@ plt.show()
 ```
 
 
-![png](output_41_0.png)
+![1](Images/1.png)
 
 
 
@@ -3079,7 +3079,7 @@ plt.show()
 ```
 
 
-![png](output_44_0.png)
+![2](Images/2.png)
 
 
 
@@ -3107,7 +3107,7 @@ plt.show()
 ```
 
 
-![png](output_47_0.png)
+![3](Images/3.png)
 
 
 
@@ -3135,7 +3135,7 @@ plt.show()
 ```
 
 
-![png](output_50_0.png)
+![4](Images/4.png)
 
 
 
@@ -3163,7 +3163,7 @@ plt.show()
 ```
 
 
-![png](output_53_0.png)
+![5](Images/5.png)
 
 
 # Rent vs. Own
@@ -3849,7 +3849,7 @@ plt.show()
 ```
 
 
-![png](output_72_0.png)
+![6](Images/6.png)
 
 
 # Per Capita Income vs. House Costs 
@@ -3988,7 +3988,7 @@ plt.show()
 ```
 
 
-![png](output_77_0.png)
+![7](Images/7.png)
 
 
 
@@ -4009,7 +4009,7 @@ plt.show()
 ```
 
 
-![png](output_78_0.png)
+![8](Images/8.png)
 
 
 
@@ -4612,7 +4612,7 @@ plt.show()
 ```
 
 
-![png](output_91_0.png)
+![9](Images/9.png)
 
 
 
@@ -4633,5 +4633,5 @@ plt.show()
 ```
 
 
-![png](output_92_0.png)
+![10](Images/10.png)
 
