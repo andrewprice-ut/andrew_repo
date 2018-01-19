@@ -20,8 +20,8 @@ import numpy as np
 
 ```python
 # Take in all of our ride sharing data and read it into pandas
-ride_data = "./raw_data/ride_data.csv"
-city_data = "./raw_data/city_data.csv"
+ride_data = "ride_data.csv"
+city_data = "city_data.csv"
 
 ride_data_df = pd.read_csv(ride_data)
 city_data_df = pd.read_csv(city_data)
@@ -1187,7 +1187,7 @@ type_group
 
 
 
-    <pandas.core.groupby.DataFrameGroupBy object at 0x000001F7390BEE80>
+    <pandas.core.groupby.DataFrameGroupBy object at 0x0000015D73AD3A90>
 
 
 
